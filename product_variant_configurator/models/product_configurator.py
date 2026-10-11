@@ -291,16 +291,18 @@ class ProductConfigurator(models.AbstractModel):
             ):
                 product_attribute = product_attribute_value.attribute_id
                 existing_attribute_line = (
-                    self.product_tmpl_id.attribute_line_ids.filtered(  # noqa
-                        lambda line,
-                        product_attribute=product_attribute: line.attribute_id
-                        == product_attribute
+                    self.product_tmpl_id.attribute_line_ids.filtered(
+                        lambda line, product_attribute=product_attribute: (
+                            line.attribute_id == product_attribute
+                        )
                     )
                 )
-                product_template_attribute_values |= existing_attribute_line.product_template_value_ids.filtered(  # noqa
-                    lambda v,
-                    prod_attr_val=product_attribute_value: v.product_attribute_value_id  # noqa
-                    == prod_attr_val
+                product_template_attribute_values |= (
+                    existing_attribute_line.product_template_value_ids.filtered(  # noqa
+                        lambda v, prod_attr_val=product_attribute_value: (
+                            v.product_attribute_value_id == prod_attr_val
+                        )
+                    )
                 )
             # Create the product with sudo for not requiring the permission for creating
             # products to those users confirming the SO/PO

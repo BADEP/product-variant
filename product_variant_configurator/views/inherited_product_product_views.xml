@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <record model="ir.ui.view" id="product_variants_view">
+    <record id="product_variants_view" model="ir.ui.view">
         <field name="name">product.product.variants.form</field>
         <field name="model">product.product</field>
         <field name="inherit_id" ref="product.product_normal_form_view" />
@@ -22,7 +22,7 @@
             </xpath>
         </field>
     </record>
-    <record model="ir.ui.view" id="product_variants_view_2">
+    <record id="product_variants_view_2" model="ir.ui.view">
         <field name="name">product.product.variants.form</field>
         <field name="model">product.product</field>
         <field
