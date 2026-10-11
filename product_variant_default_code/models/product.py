@@ -138,7 +138,7 @@ class ProductTemplate(models.Model):
         default_reference_separator = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param("default_reference_separator")
+            .get_str("default_reference_separator")
             or ""
         )
         # Get the attribute name in the main lang format, otherwise we could not
@@ -186,7 +186,7 @@ class ProductTemplate(models.Model):
     )
     def _compute_default_code(self):
         super()._compute_default_code()
-        if self.env["ir.config_parameter"].get_param(
+        if self.env["ir.config_parameter"].get_str(
             "product_variant_default_code.prefix_as_default_code"
         ):
             unique_variants = self.filtered(
