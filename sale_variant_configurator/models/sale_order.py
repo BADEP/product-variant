@@ -86,8 +86,9 @@ class SaleOrderLine(models.Model):
         for line in lines_with_template:
             fiscal_position = line.order_id.fiscal_position_id
             taxes = line.product_tmpl_id.taxes_id.filtered(
-                lambda r, line=line: not line.company_id
-                or r.company_id == line.company_id
+                lambda r, line=line: (
+                    not line.company_id or r.company_id == line.company_id
+                )
             )
             line.tax_id = fiscal_position.map_tax(taxes) if fiscal_position else taxes
         self -= lines_with_template
