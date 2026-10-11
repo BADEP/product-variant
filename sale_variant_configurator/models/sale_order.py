@@ -3,6 +3,8 @@
 # Copyright 2024 Tecnativa - Carolina Fernandez
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
+import typing
+
 from odoo import api, fields, models
 
 
@@ -20,7 +22,10 @@ class SaleOrder(models.Model):
 
 
 class SaleOrderLine(models.Model):
-    _inherit = ["sale.order.line", "product.configurator"]
+    _inherit: typing.ClassVar[list[str]] = [
+        "sale.order.line",
+        "product.configurator",
+    ]
     _name = "sale.order.line"
     _partner_id_field = "order_partner_id"
 
