@@ -27,6 +27,7 @@ class ProductCategory(models.Model):
                     ),
                 }
             }
+        return None
 
     def write(self, values):
         res = super().write(values)

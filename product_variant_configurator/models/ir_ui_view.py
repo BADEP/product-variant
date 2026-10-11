@@ -17,5 +17,5 @@ class View(models.Model):
 
         name = node.get("name")
         if name_manager.model._name == "product.product" and name == "product_id":
-            return
+            return None
         return super()._postprocess_tag_groupby(node, name_manager, node_info)

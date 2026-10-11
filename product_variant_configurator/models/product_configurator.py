@@ -38,7 +38,7 @@ class ProductConfigurator(models.AbstractModel):
     product_id = fields.Many2one(
         string="Product Variant", comodel_name="product.product"
     )
-    product_id_configurator_domain = fields.Binary(
+    product_id_configurator_domain = fields.Json(
         compute="_compute_product_id_configurator_domain",
         readonly=True,
         store=False,
@@ -191,7 +191,7 @@ class ProductConfigurator(models.AbstractModel):
     def _onchange_create_product_variant(self):
         self.ensure_one()
         if not self.create_product_variant:
-            return
+            return None
         self.create_product_variant = False
         try:
             with self.env.cr.savepoint():
@@ -298,7 +298,7 @@ class ProductConfigurator(models.AbstractModel):
                     )
                 )
                 product_template_attribute_values |= (
-                    existing_attribute_line.product_template_value_ids.filtered(  # noqa
+                    existing_attribute_line.product_template_value_ids.filtered(
                         lambda v, prod_attr_val=product_attribute_value: (
                             v.product_attribute_value_id == prod_attr_val
                         )

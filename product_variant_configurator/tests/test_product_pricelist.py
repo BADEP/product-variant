@@ -7,6 +7,8 @@ from odoo.addons.base.tests.common import BaseCommon
 
 
 class TestProductPriceList(BaseCommon):
+    _test_user_groups = None
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -125,11 +127,10 @@ class TestProductPriceList(BaseCommon):
                         {
                             "name": "Rule 20% on ipad product",
                             "product_id": cls.ipad_product.id,
-                            "categ_id": cls.physical.id,
                             "min_quantity": 1,
                             "base": "list_price",
                             "applied_on": "0_product_variant",
-                            "compute_price": "formula",
+                            "compute_price": "discount",
                             "price_discount": 20,
                         },
                     ),
@@ -140,7 +141,7 @@ class TestProductPriceList(BaseCommon):
                             "applied_on": "1_product",
                             "min_quantity": 1,
                             "base": "list_price",
-                            "compute_price": "formula",
+                            "compute_price": "discount",
                             "price_discount": 10,
                         },
                     ),
@@ -151,8 +152,8 @@ class TestProductPriceList(BaseCommon):
                             "applied_on": "1_product",
                             "base": "list_price",
                             "min_quantity": 4,
-                            "compute_price": "percentage",
-                            "percent_price": 10,
+                            "compute_price": "discount",
+                            "price_discount": 10,
                         },
                     ),
                 ],

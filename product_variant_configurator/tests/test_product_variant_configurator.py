@@ -9,6 +9,8 @@ from odoo.addons.base.tests.common import BaseCommon
 
 
 class TestProductVariantConfigurator(BaseCommon):
+    _test_user_groups = None
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -289,7 +291,7 @@ class TestProductVariantConfigurator(BaseCommon):
         product.product_tmpl_id = self.product_template_empty_yes
         self.assertEqual(
             product.product_id_configurator_domain,
-            [("product_tmpl_id", "=", self.product_template_empty_yes.id)],
+            [["product_tmpl_id", "=", self.product_template_empty_yes.id]],
         )
 
     def test_templ_name_search(self):
@@ -378,7 +380,7 @@ class TestProductVariantConfigurator(BaseCommon):
             product.product_attribute_ids = [Command.create(product_attribute_vals)]
             product._onchange_product_attribute_ids_configurator()
             self.assertTrue(
-                ("product_tmpl_id", "=", self.product_template_yes.id)
+                ["product_tmpl_id", "=", self.product_template_yes.id]
                 in product.product_id_configurator_domain
             )
 
@@ -406,10 +408,12 @@ class TestProductVariantConfigurator(BaseCommon):
             "owner_model": "res.partner",
             "owner_id": int(product.id),
         }
-        product.product_attribute_ids = [Command.create(product_attribute_vals)]
+        # Odoo 20 refuses linking records outside the one2many domain
+        # (owner_model), so create the foreign-owner line directly.
+        self.env["product.configurator.attribute"].create(product_attribute_vals)
         product._onchange_product_attribute_ids_configurator()
         self.assertTrue(
-            ("product_tmpl_id", "=", self.product_template_yes.id)
+            ["product_tmpl_id", "=", self.product_template_yes.id]
             in product.product_id_configurator_domain
         )
 
