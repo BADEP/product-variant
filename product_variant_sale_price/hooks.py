@@ -22,3 +22,9 @@ def set_sale_price_on_variant(env, template_id=None):
         env.cr.execute(sql, (template_id,))
     else:
         env.cr.execute(sql)
+    # lst_price is stored since 20.0: recompute it from the new fix_price
+    domain = [("product_tmpl_id", "=", template_id)] if template_id else []
+    products = env["product.product"].with_context(active_test=False).search(domain)
+    products.invalidate_recordset(["fix_price"])
+    env.add_to_compute(products._fields["lst_price"], products)
+    products._recompute_recordset(["lst_price"])
