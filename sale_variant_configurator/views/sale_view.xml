@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <record model="ir.ui.view" id="view_order_form">
+    <record id="view_order_form" model="ir.ui.view">
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form" />
         <field name="priority" eval="20" />
@@ -90,7 +90,7 @@
             </xpath>
         </field>
     </record>
-    <record model="ir.ui.view" id="view_order_line_tree">
+    <record id="view_order_line_tree" model="ir.ui.view">
         <field name="model">sale.order.line</field>
         <field name="inherit_id" ref="sale.view_order_line_tree" />
         <field name="arch" type="xml">
@@ -100,7 +100,7 @@
             </field>
         </field>
     </record>
-    <record model="ir.ui.view" id="view_sales_order_line_filter">
+    <record id="view_sales_order_line_filter" model="ir.ui.view">
         <field name="model">sale.order.line</field>
         <field name="inherit_id" ref="sale.view_sales_order_line_filter" />
         <field name="arch" type="xml">
