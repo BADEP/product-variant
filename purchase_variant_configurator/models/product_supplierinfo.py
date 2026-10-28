@@ -49,5 +49,5 @@ class ProductSupplierinfo(models.Model):
         # The workaround is to remove the id sorting criteria for this specific case.
         if callable(key):
             if key.__code__.co_names == ("sequence", "min_qty", "price", "id"):
-                key = lambda s=self: (s.sequence, -s.min_qty, s.price)  # noqa
+                key = lambda s=self: (s.sequence, -s.min_qty, s.price)
         return super().sorted(key=key, reverse=reverse)
