@@ -3,8 +3,6 @@
 # Copyright 2024 Tecnativa - Carolina Fernandez
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
-import typing
-
 from odoo import api, fields, models
 
 
@@ -22,7 +20,7 @@ class SaleOrder(models.Model):
 
 
 class SaleOrderLine(models.Model):
-    _inherit: typing.ClassVar[list[str]] = [
+    _inherit = [  # noqa: RUF012
         "sale.order.line",
         "product.configurator",
     ]
