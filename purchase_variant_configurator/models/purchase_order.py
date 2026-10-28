@@ -4,8 +4,6 @@
 # Copyright 2017 Tecnativa - David Vidal
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
-import typing
-
 from odoo import api, fields, models
 
 
@@ -37,7 +35,7 @@ class PurchaseOrder(models.Model):
 
 
 class PurchaseOrderLine(models.Model):
-    _inherit: typing.ClassVar[list[str]] = [
+    _inherit = [  # noqa: RUF012
         "purchase.order.line",
         "product.configurator",
     ]
