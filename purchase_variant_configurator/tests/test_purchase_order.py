@@ -8,6 +8,8 @@ from odoo.addons.base.tests.common import BaseCommon
 
 
 class TestPurchaseOrder(BaseCommon):
+    _test_user_groups = None
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -84,18 +86,18 @@ class TestPurchaseOrder(BaseCommon):
             {
                 "product_tmpl_id": self.product_template_yes.id,
                 "price_unit": 100,
-                "product_uom_id": self.product_template_yes.uom_id.id,
+                "uom_id": self.product_template_yes.uom_id.id,
                 "product_qty": 1,
                 "name": "Line 1",
                 "date_planned": "2016-01-01",
             }
         )
-        expected_domain = [("product_tmpl_id", "=", self.product_template_yes.id)]
+        expected_domain = [["product_tmpl_id", "=", self.product_template_yes.id]]
         self.assertEqual(line1.product_id_configurator_domain, expected_domain)
         line2 = self.purchase_order_line.new(
             {
                 "product_tmpl_id": self.product_template_no.id,
-                "product_uom_id": self.product_template_no.uom_id.id,
+                "uom_id": self.product_template_no.uom_id.id,
                 "product_qty": 1,
                 "price_unit": 200,
                 "name": "Line 2",
@@ -106,8 +108,11 @@ class TestPurchaseOrder(BaseCommon):
         line2._onchange_product_id_configurator()
         line2.onchange_product_id()
         self.assertEqual(line2.product_id, self.product_template_no.product_variant_ids)
+        # In 20.0 the line name only holds the description; the product name
+        # is added by the computed label
+        self.assertEqual(line2.name, self.product_template_no.description_purchase)
         self.assertEqual(
-            line2.name,
+            line2.label,
             f"{self.product_template_no.name}\n{self.product_template_no.description_purchase}",
         )
 
@@ -121,7 +126,7 @@ class TestPurchaseOrder(BaseCommon):
         self.assertFalse(line.product_id)
         self.assertIn("Product template 1", line.name)
         self.assertIn("Purchase Description", line.name)
-        self.assertEqual(line.product_uom_id, self.product_template_yes.uom_id)
+        self.assertEqual(line.uom_id, self.product_template_yes.uom_id)
         self.assertEqual(line.price_unit, 90)
         self.assertEqual(line.product_qty, 11)
         self.assertTrue(line.date_planned)
@@ -156,12 +161,12 @@ class TestPurchaseOrder(BaseCommon):
         line = order.order_line
         self.assertEqual(line.product_id, product)
         expected_domain = [
-            ("product_tmpl_id", "=", self.product_template_yes.id),
-            (
+            ["product_tmpl_id", "=", self.product_template_yes.id],
+            [
                 "product_template_attribute_value_ids",
                 "=",
                 product.product_template_attribute_value_ids[0].id,
-            ),
+            ],
         ]
         self.assertEqual(line.product_id_configurator_domain, expected_domain)
 
@@ -173,7 +178,7 @@ class TestPurchaseOrder(BaseCommon):
                 "name": "Line 1",
                 "product_qty": 1,
                 "date_planned": "2016-01-01",
-                "product_uom_id": self.product_template_yes.uom_id.id,
+                "uom_id": self.product_template_yes.uom_id.id,
             }
         )
         self.assertFalse(line.can_create_product)
@@ -228,7 +233,7 @@ class TestPurchaseOrder(BaseCommon):
                 "name": "Line 1",
                 "product_qty": 1,
                 "date_planned": "2016-01-01",
-                "product_uom_id": self.product_template_yes.uom_id.id,
+                "uom_id": self.product_template_yes.uom_id.id,
                 "product_attribute_ids": [
                     Command.create(
                         {
@@ -245,7 +250,7 @@ class TestPurchaseOrder(BaseCommon):
         line_2 = self.purchase_order_line.new(
             {
                 "product_tmpl_id": self.product_template_no.id,
-                "product_uom_id": self.product_template_no.uom_id.id,
+                "uom_id": self.product_template_no.uom_id.id,
                 "product_qty": 1,
                 "price_unit": 200,
                 "name": "Line 2",

@@ -28,34 +28,37 @@ class PurchaseOrder(models.Model):
                 partner_id=line.partner_id,
                 quantity=line.product_qty,
                 date=line.order_id.date_order and line.order_id.date_order.date(),
-                uom_id=line.product_uom_id,
+                uom_id=line.uom_id,
             )
             line.date_planned = line._get_date_planned(seller)
         return new_po
 
 
 class PurchaseOrderLine(models.Model):
-    _inherit = ["purchase.order.line", "product.configurator"]
+    _inherit = [  # noqa: RUF012
+        "purchase.order.line",
+        "product.configurator",
+    ]
     _name = "purchase.order.line"
 
     product_id = fields.Many2one(required=False)
     product_id_is_required = fields.Boolean(compute="_compute_product_id_is_required")
-    product_uom_id = fields.Many2one(
-        compute="_compute_product_uom_id",
+    uom_id = fields.Many2one(
+        compute="_compute_uom_id",
         store=True,
         readonly=False,
     )
 
     _accountable_required_fields = models.Constraint(
         "CHECK(display_type IS NOT NULL OR (product_tmpl_id IS NOT NULL OR "
-        "product_id IS NOT NULL AND product_uom_id IS NOT NULL AND "
+        "product_id IS NOT NULL AND uom_id IS NOT NULL AND "
         "date_planned IS NOT NULL))",
         "Missing required fields on accountable purchase order line.",
     )
     _non_accountable_null_fields = models.Constraint(
         "CHECK(display_type IS NULL OR (product_tmpl_id IS NULL AND "
         "product_id IS NULL AND price_unit = 0 AND product_uom_qty = 0 AND "
-        "product_uom_id IS NULL AND date_planned is NULL))",
+        "uom_id IS NULL AND date_planned is NULL))",
         "Forbidden values on non-accountable purchase order line",
     )
 
@@ -65,11 +68,11 @@ class PurchaseOrderLine(models.Model):
             item.product_id_is_required = not item.company_id.po_confirm_create_variant
 
     @api.depends("product_id")
-    def _compute_product_uom_id(self):
+    def _compute_uom_id(self):
         for line in self:
-            if not line.product_id or line.product_uom_id:
+            if not line.product_id or line.uom_id:
                 continue
-            line.product_uom_id = line.product_id.uom_id
+            line.uom_id = line.product_id.uom_id
 
     @api.onchange("product_tmpl_id")
     def _onchange_product_tmpl_id_configurator(self):

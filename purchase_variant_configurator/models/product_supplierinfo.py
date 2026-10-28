@@ -47,7 +47,11 @@ class ProductSupplierinfo(models.Model):
         # record, and thus getting the error:
         # TypeError: '<' not supported between instances of 'NewId' and 'NewId'
         # The workaround is to remove the id sorting criteria for this specific case.
-        if callable(key):
-            if key.__code__.co_names == ("sequence", "min_qty", "price", "id"):
-                key = lambda s=self: (s.sequence, -s.min_qty, s.price)
+        if callable(key) and key.__code__.co_names == (
+            "sequence",
+            "min_qty",
+            "price",
+            "id",
+        ):
+            key = lambda s=self: (s.sequence, -s.min_qty, s.price)
         return super().sorted(key=key, reverse=reverse)
