@@ -34,11 +34,12 @@ class ProductPricelist(models.Model):
                 **kwargs,
             )
 
+        pricelist = self
         if not uom and self.env.context.get("uom"):
             ctx = dict(self.env.context)
             # Remove uom context for avoiding the re-processing
-            self = self.with_context(**ctx)
-        return super()._compute_price_rule(
+            pricelist = self.with_context(**ctx)
+        return super(ProductPricelist, pricelist)._compute_price_rule(
             products=products,
             quantity=quantity,
             currency=currency,

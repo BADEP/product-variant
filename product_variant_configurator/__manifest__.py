@@ -7,7 +7,7 @@
 {
     "name": "Product Variant Configurator",
     "summary": "Provides an abstract model for product variant configuration.",
-    "version": "19.0.1.0.2",
+    "version": "20.0.1.0.0",
     "category": "Product Variant",
     "development_status": "Production/Stable",
     "license": "AGPL-3",
@@ -16,11 +16,11 @@
     "depends": ["product"],
     "data": [
         "security/product_configurator_security.xml",
-        "security/ir.model.access.csv",
         "views/product_configurator_attribute.xml",
         "views/inherited_product_template_views.xml",
         "views/inherited_product_product_views.xml",
         "views/inherited_product_category_views.xml",
         "views/inherited_product_attribute_views.xml",
+        "security/ir.access.csv",
     ],
 }

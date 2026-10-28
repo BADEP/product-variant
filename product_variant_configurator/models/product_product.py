@@ -8,7 +8,7 @@ from odoo.tools import config
 
 
 class ProductProduct(models.Model):
-    _inherit = ["product.product", "product.configurator"]
+    _inherit = ["product.product", "product.configurator"]  # noqa: RUF012
     _name = "product.product"
 
     def _get_product_attributes_values_dict(self):
@@ -27,8 +27,7 @@ class ProductProduct(models.Model):
         )
         if description:
             return "{}\n{}".format(self.product_tmpl_id.name, "\n".join(description))
-        else:
-            return self.product_tmpl_id.name
+        return self.product_tmpl_id.name
 
     @api.model
     def _build_attributes_domain(self, product_template, product_attributes):
