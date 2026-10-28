@@ -3,14 +3,12 @@
 # Copyright 2016 ACSONE SA/NV
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3
 
-from typing import ClassVar
-
 from odoo import Command, api, exceptions, models
 from odoo.tools import config
 
 
 class ProductProduct(models.Model):
-    _inherit: ClassVar[list[str]] = ["product.product", "product.configurator"]
+    _inherit = ["product.product", "product.configurator"]  # noqa: RUF012
     _name = "product.product"
 
     def _get_product_attributes_values_dict(self):
